@@ -9,7 +9,7 @@ const ai = new GoogleGenAI({
 export async function createImage(userPrompt: string, imageUrl: string, outputFilePath: string) {
     const base64Image = await axios
         .get(imageUrl, {
-        responseType: 'arraybuffer'
+            responseType: 'arraybuffer'
         })
         .then(response => Buffer.from(response.data, 'binary').toString('base64'))
   

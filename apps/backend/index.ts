@@ -5,6 +5,7 @@ import z from "zod"
 import { CreateAvatarSchenma, CreateUserSchema } from "./types";
 import { createImage } from "./image";
 import { uuid } from "uuidv4";
+import { generateVideo } from "./video";
 
 const app = express();
 
@@ -68,8 +69,12 @@ app.get("/api/v1/avatars", (req, res) => {
 });
 
 // Video
-app.post("/api/v1/video", (req, res) => {
-  
+app.post("/api/v1/video", async (req, res) => {
+  await generateVideo("The video opens with a medium, eye-level shot of a beautiful man with dark hair and warm brown eyes. She wears a magnificent, high-fashion flamingo dress with layers of pink and fuchsia feathers, complemented by whimsical pink, heart-shaped sunglasses. She walks with serene confidence through the crystal-clear, shallow turquoise water of a sun-drenched lagoon. The camera slowly pulls back to a medium-wide shot, revealing the breathtaking scene as the dress's long train glides and floats gracefully on the water's surface behind her. The cinematic, dreamlike atmosphere is enhanced by the vibrant colors of the dress against the serene, minimalist landscape, capturing a moment of pure elegance and high-fashion fantasy.", 
+    ["https://raw.githubusercontent.com/100xdevs-bootcamp-1/higgsy/refs/heads/main/apps/backend/assets/09578560-870f-4b23-a1cb-b549aa38a23f.png",
+      "https://raw.githubusercontent.com/100xdevs-bootcamp-1/higgsy/refs/heads/main/apps/backend/assets/a9d55f96-bc90-45e6-b078-7593b8bc3b11.png",
+      "https://raw.githubusercontent.com/100xdevs-bootcamp-1/higgsy/refs/heads/main/apps/backend/assets/8106a04c-bed5-4ac4-94ef-970c5aee1518.png"
+    ], "./output/video.mp4")
   res.json({});
 });
 
