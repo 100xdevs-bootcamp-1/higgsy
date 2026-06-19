@@ -1,13 +1,14 @@
 import express from "express";
-import axios from "axios";
 import { prisma } from "./db";
-import z from "zod"
 import { CreateAvatarSchenma, CreateUserSchema } from "./types";
 import { createImage } from "./image";
 import { uuid } from "uuidv4";
 import { generateVideo } from "./video";
+import cors from "cors";
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -27,6 +28,7 @@ app.post("/api/v1/signup", async (req, res) => {
       password: req.body.password
     }
   })
+
   res.json({
     id: user.id
   });
@@ -49,23 +51,40 @@ app.post("/api/v1/avatar", async (req, res) => {
   const rightProfileId = uuid();
   const frontProfileId = uuid();
 
-  await Promise.all([
-    createImage("Create a side profile for the user for the left side. It should be a high quality portfolio shoot type photo", data.image, `./assets/${leftProfileId}.png`),
-    createImage("Create a side profile for the user for the right side. It should be a high quality portfolio shoot type photo", data.image, `./assets/${rightProfileId}.png`),
-    createImage("Create a front profile for the user. It should be a high quality portfolio shoot type photo", data.image, `./assets/${frontProfileId}.png`),
-  ])
+  // await Promise.all([
+  //   createImage("Create a side profile for the user for the left side. It should be a high quality portfolio shoot type photo", data.image, `./assets/${leftProfileId}.png`),
+  //   createImage("Create a side profile for the user for the right side. It should be a high quality portfolio shoot type photo", data.image, `./assets/${rightProfileId}.png`),
+  //   createImage("Create a front profile for the user. It should be a high quality portfolio shoot type photo", data.image, `./assets/${frontProfileId}.png`),
+  // ])
 
   // put in s3 and then put in db
+  await prisma.avatar.create({
+    data: {
+      userId: "1",
+      name: req.body.name
+    }
+  })
   
   res.json({});
 });
 
-app.get("/api/v1/avatar/:avatarId", (req, res) => {
-  res.json({});
+app.get("/api/v1/avatar/:avatarId", async (req, res) => {
+  const avatars = await prisma.avatar.findMany({
+    where: {
+      userId: "1",
+    }
+  })
+  console.log(avatars);
+  res.json({avatars});
 });
 
-app.get("/api/v1/avatars", (req, res) => {
-  res.json({});
+app.get("/api/v1/avatars", async (req, res) => {
+  const avatars = await prisma.avatar.findMany({
+    where: {
+      userId: "1",
+    }
+  })
+  res.json({avatars});
 });
 
 // Video
